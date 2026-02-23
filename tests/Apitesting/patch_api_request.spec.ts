@@ -3,9 +3,9 @@ Prequiste ->
     data : from JSON
     crete token
 
-1.Create a booking  (Post)-> bookingID
+1.Create a booking  (Pqtch)-> bookingID
 2.Create token
-3. Update booking (put) -> requires token
+3.  Partial Update booking (put) -> requires token
 
 */
 
@@ -20,7 +20,7 @@ function readJson(filePath: string) {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
 }
 
-test('update Booking (put)', async ({ request }) => {
+test('Partial update Booking (Patch)', async ({ request }) => {
 
     // Create Booking (Post )---> BookingID
     const requestBody = readJson('testData/post_request_body.json')
@@ -34,7 +34,7 @@ test('update Booking (put)', async ({ request }) => {
     console.log("BookingId   =========> ", bookingId);
 
 
-    // 2.   Update booking (put) -> requires token
+    // 2.  Partial Update booking (Patch) -> requires token
 
     // token creation
 
@@ -47,24 +47,24 @@ test('update Booking (put)', async ({ request }) => {
     console.log("token =====>", token);
     expect(createTokenBody).toHaveProperty('token');
 
-    // sending update (Put)
-    const updateRequestBody = readJson('testData/put_request_body.json')
-    const updateResponse = await request.put(
+    // sending update (Patch)
+    const patchRequestBody = readJson('testData/patch_request_body.json')
+    const patchResponse = await request.patch(
         `https://restful-booker.herokuapp.com/booking/${bookingId}`,
         {
-            data: updateRequestBody,
+            data: patchRequestBody,
             headers: {
                 "Cookie": `token=${token}`,
                 "Content-Type": "application/json"
             }
         }
     )
-    expect(updateResponse.ok()).toBeTruthy();
-    expect(updateResponse.status()).toBe(200);
-    const updateResponseBody = await updateResponse.json()
-    console.log(updateResponseBody)
+    expect(patchResponse.ok()).toBeTruthy();
+    expect(patchResponse.status()).toBe(200);
+    const patchResponseBody = await patchResponse.json()
+    console.log(patchResponseBody)
 
-    console.log("Booking details updated successfully");
+    console.log("Booking details partially updated successfully");
 
 })
 
@@ -72,7 +72,7 @@ test('update Booking (put)', async ({ request }) => {
 /*
     ====================== OUTPUT =======================
 {
-  bookingid: 3792,
+  bookingid: 4495,
   booking: {
     firstname: 'Jim',
     lastname: 'Brown',
@@ -82,18 +82,17 @@ test('update Booking (put)', async ({ request }) => {
     additionalneeds: 'Breakfast'
   }
 }
-BookingId   =========>  3792
-token =====> 670c26a2a1c4212
+BookingId   =========>  4495
+token =====> 82055cf237d341f
 {
-  firstname: 'Satyam',
+  firstname: 'Shivam',
   lastname: 'Jaiswal',
-  totalprice: 200,
+  totalprice: 111,
   depositpaid: true,
-  bookingdates: { checkin: '2026-01-01', checkout: '2026-02-01' },
-  additionalneeds: 'orange'
+  bookingdates: { checkin: '2018-01-01', checkout: '2019-01-01' },
+  additionalneeds: 'Grapes'
 }
-Booking details updated successfully
-  1 passed (2.9s)
-
+Booking details partially updated successfully
+  1 passed (3.1s)
 
   */
