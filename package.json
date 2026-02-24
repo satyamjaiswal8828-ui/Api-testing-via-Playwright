@@ -11,7 +11,9 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^25.2.3"
+    "@types/node": "^25.2.3",
+    "ajv": "^8.18.0",
+    "playwright": "^1.58.2"
   },
   "dependencies": {
     "@faker-js/faker": "^10.3.0",
